@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Launch Vibe Coding</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='50%' x='50%' dy='.35em' text-anchor='middle' font-size='52'>🚀</text></svg>">
+
+
+  <style>
+    :root {
+  --bg: #f5f7fa;
+  --radius: 14px;
+
+  /* Featured gradient & accent */
+  --grad-featured: linear-gradient(90deg, #6a5cff 0%, #2b8dff 100%);
+  --accent-featured: linear-gradient(90deg, #00b8ff 0%, #ff7b00 100%);
+
+  /* Badge colors */
+  --badge-free:   #34a853;
+  --badge-paid:   #ff9800;
+  --badge-featured: #e600ff;
+
+  /* Brand palette */
+  --brand:  #6a5cff;
+  --brand2: #2b8dff;
+  --orange: #ff5f16;
+  --orange2:#ff3434;
+}
+
+* { box-sizing: border-box; margin: 0 }
+body {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+  background:#0d1117;           /* github‑dark style */
+  color:#e6edf3; 
+}
+a { text-decoration: none; color: inherit }
+
+/* ── NAVBAR ─────────────────────────────────────────── */
+.navbar {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:.75rem 1.5rem; 
+  position:sticky; top:0; z-index:100;
+
+  background:#0d1117;    /* translucent dark glass */
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid #272c34;
+}
+.nav-left { display:flex; align-items:center; gap:.75rem; }
+.logo  { width:32px; height:32px; border-radius:8px;
+         background:linear-gradient(90deg, var(--brand) 0%, var(--brand2) 100%);
+         color:#fff; font-weight:700;
+         display:flex; align-items:center; justify-content:center; }
+.brand { display:flex; flex-direction:column; line-height:1 }
+.brand small { font-size:.75rem; color:#6b7280 }
+.submit-btn {
+  background:linear-gradient(90deg,var(--brand),var(--brand2));
+  border:none; border-radius:5px; color:#fff; font-weight:600;
+  padding:.55rem 1.25rem; cursor:pointer;
+}
+
+/* ── HERO ───────────────────────────────────────────── */
+.hero {
+  max-width:1280px; margin:auto; padding:4rem 2rem;
+  display:grid; gap:3rem;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  align-items:center;
+}
+.hero-left h1 { font-size:2.25rem; line-height:1.15; margin-bottom:1rem }
+.hero-left p  { font-size:1.125rem; line-height:1.6; color:#374151; margin-bottom:1.5rem; color:white; }
+.hero-left a.link { color:var(--brand); font-weight:600; text-decoration:underline }
+.cta {
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:linear-gradient(90deg,var(--brand),var(--brand2));
+  color:#fff; padding:.5rem 1.2rem; border-radius:5px; font-weight:600;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.cta svg { width:18px; height:18px }
+
+/* Promo cards */
+.promos { display:flex; flex-direction:column; gap:1.5rem }
+.promo {
+  border-radius:var(--radius);
+  padding:1.5rem; display:flex; flex-direction:column; gap:1rem;
+}
+.promo small { font-size:.75rem; font-weight:700; text-transform:uppercase; opacity:.8 }
+.promo h3    { font-size:1.125rem; font-weight:700; margin:0 }
+.promo p     { font-size:.95rem; line-height:1.5; margin:0; opacity:.9 }
+.promo .btn  { margin-top:auto; border:none; border-radius:8px;
+               padding:.55rem 1.25rem; font-weight:600; cursor:pointer }
+
+/* Sponsor */
+.promo.sponsor { border:2px dashed #a3c1ff; background:#eef5ff; color:#1e1e1e }
+.promo.sponsor .btn { background:var(--brand); color:#fff }
+
+/* Community */
+.promo.community { background:linear-gradient(135deg,var(--orange) 0%,var(--orange2) 100%); color:#fff }
+.promo.community .btn { background:rgba(255,255,255,.18); color:#fff }
+
+/* ── FILTER BAR ─────────────────────────────────────── */
+.filters { display:flex; gap:1rem; justify-content:center; padding:1.5rem 0 .5rem;}
+.filter-btn {
+  border:none; background:none; cursor:pointer;
+  padding:.4rem 1.1rem; font-weight:600; border-radius:9999px;
+  color:#fff; transition:background .2s;
+}
+.filter-btn.active { background:var(--brand); color:#fff }
+
+/* ── GRID ───────────────────────────────────────────── */
+.grid {
+  display:grid; gap:1.5rem;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  padding:1rem 2rem 3rem; max-width:1280px; margin:auto;
+}
+
+/* ── CARD BASE ──────────────────────────────────────── */
+.card      { position:relative; overflow:hidden; border-radius:var(--radius);
+             display:flex; flex-direction:column; min-height:260px; }
+.card-bg   { position:absolute; inset:0; z-index:-1 }
+.accent    { height:4px; width:100%; position:absolute; top:0; left:0 }
+.card-content { padding:1.25rem; display:flex; flex-direction:column; flex:1 }
+
+.card-header { display:flex; gap:.75rem; align-items:center; margin-bottom:.75rem }
+.card-header img { width:46px; height:46px; border-radius:10px; object-fit:cover }
+.site-name  { font-weight:600 }
+
+.badges-line { display:flex; gap:.4rem; font-size:.8rem; margin-bottom:.75rem }
+.badge       { font-size:.7rem; padding:.15rem .55rem; border-radius:9999px;
+               font-weight:500; color:#fff; display:inline-flex; align-items:center }
+.badge.featured { background:var(--badge-featured) }
+.badge.free     { background:var(--badge-free) }
+.badge.paid     { background:var(--badge-paid) }
+
+.description            { font-size:.9rem; line-height:1.4; color:#d0d4df; margin:0 }
+.card.plain .description{ color:#4b5563 }
+
+.visit-btn {
+  margin-top:auto; border:none; width:100%; cursor:pointer;
+  padding:.65rem 1rem; border-radius:8px; font-weight:600;
+  display:flex; justify-content:center; transition:opacity .2s;
+}
+.visit-btn:hover { opacity:.92 }
+
+.empty { text-align:center; padding:3rem 1rem; color:#6b7280 }
+
+/* ── CARD VARIANTS ─────────────────────────────────── */
+.card.gradient           { color:#fff }
+.card.gradient .visit-btn{ background:#fff; color:#000 }
+.card.plain              { background:#fff; border:1px solid #e5eaf2; color:#1e1e1e }
+.card.plain .visit-btn   { background:var(--brand); color:#fff }
+.brand span {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.18rem;
+  cursor: pointer;
+}
+
+@media (max-width:600px){
+  .navbar{
+    flex-direction:column; gap:.75rem; align-items:flex-start;
+  }
+  .submit-btn{ width:100%; text-align:center; }
+}
+
+/* ── Title hover : gradient like the buttons ─────── */
+.brand span{
+  transition:all .25s ease;
+}
+.brand span:hover{
+  background:linear-gradient(90deg,var(--brand) 0%,var(--brand2) 100%);
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent; color:transparent;
+}
+
+/* ────────────────────────── ADDITIONS ───────────────────────── */
+
+/* modal overlay */
+.vc-modal{
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  display:flex; align-items:center; justify-content:center; z-index:200;
+  color: #000;
+}
+.vc-hidden{display:none}
+
+/* modal box */
+.vc-modal-box{
+  width:92%; max-width:420px; background:#fff; border-radius:var(--radius);
+  padding:2rem 1.75rem; box-shadow:0 10px 30px rgba(0,0,0,.12);
+  display:flex; flex-direction:column; gap:1.25rem;
+}
+.vc-modal-box h2{margin:0 0 .25rem;font-size:1.35rem}
+.vc-modal-box label{display:flex;flex-direction:column;gap:.35rem;font-weight:600}
+.vc-modal-box input,
+.vc-modal-box textarea{
+  padding:.55rem .75rem;border:1px solid #e5eaf2;border-radius:6px;
+  font-size:.92rem;resize:vertical
+}
+.vc-modal-box .submit-btn{width:100%; margin-top: 0.5rem;}
+
+
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-left">
+      <div class="logo">🚀</div>
+      <div class="brand">
+        <span>Launch Vibe Coding</span>
+        <small>Explore, compare, and discover</small>
+      </div>
+    </div>
+    <button class="submit-btn">List Your Project</button>
+  </header>
+
+  <!-- Hero banner -->
+  <section class="hero">
+    <!-- Left column -->
+    <div class="hero-left">
+      <h1>Launch Your Project</h1>
+      <p>Browse <a class="link">30+ startup Projects </a>pn Vibe Coding built by weekend tinkerers, indie hackers, and curious newcomers. Follow their journeys, celebrate their wins, and share the vibe.</p>
+      <a href="#" class="cta">List Your Project</a>
+    </div>
+
+    <!-- Right column (promos) -->
+    <div class="promos">
+      <div class="promo community">
+        <small>Community</small>
+        <h3>Join the vibe coding reddi community</h3>
+        <p>A community where fully give in to the vibes. forget that the code even exists.</p>
+        <button class="btn"><a  href="https://www.reddit.com/r/vibecoding/">Join Community → </a></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="free">Free</button>
+    <button class="filter-btn" data-filter="paid">Paid</button>
+  </section>
+
+  <!-- Grid -->
+  <main id="grid" class="grid"></main>
+
+  <!-- ────────────── ADDITION: modal markup ───────────── -->
+  <div id="vc-modal" class="vc-modal vc-hidden">
+    <div class="vc-modal-box">
+      <h2>List your project</h2>
+
+      <form id="vc-form">
+        <label>Name
+          <input id="vc-name" type="text" required>
+        </label>
+
+        <label>Link
+          <input id="vc-link" type="url" placeholder="https://…" required>
+        </label>
+
+        <label>Description
+          <textarea id="vc-desc" rows="3" required></textarea>
+        </label>
+
+        <button type="submit" class="submit-btn">Submit</button>
+      </form>
+    </div>
+  </div>
+  <!-- ─────────────────────────────────────────────────── -->
+
+  <!-- Firebase + Logic -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import {
+      getFirestore, collection, getDocs,
+      addDoc, serverTimestamp               /* + additions */
+    } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    /* 🔑  Your Firebase credentials */
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJFObnR4ssWvq6ALG1vnwcBDSc65-yL04",
+  authDomain: "vibeproject-aba3f.firebaseapp.com",
+  projectId: "vibeproject-aba3f",
+  storageBucket: "vibeproject-aba3f.firebasestorage.app",
+  messagingSenderId: "522215917008",
+  appId: "1:522215917008:web:3c103d8b2f15dc6a0625d5",
+  measurementId: "G-TN18B4WKFP"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    /* existing collection */
+    const col         = collection(db, 'directories');
+
+    /* new collection for submissions */
+    const colProjects = collection(db, 'projects');
+
+    let sites = [];
+    let activeFilter = 'all';
+
+    const stripe = (s, feat) =>
+      feat ? 'var(--accent-featured)' :
+             (s.free ? 'var(--badge-free)' : 'var(--badge-paid)');
+
+    /* Fetch & render */
+    async function init() {
+      const snap = await getDocs(col);
+      sites = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      render();
+    }
+
+    /* Build one card */
+    function buildCard(s) {
+      const feat = s.featured === true;
+      const card = document.createElement('article');
+      card.className = 'card ' + (feat ? 'gradient' : 'plain');
+
+      card.innerHTML = `<div class="accent" style="background:${stripe(s, feat)}"></div>`;
+
+      if (feat) {
+        const bg = document.createElement('div');
+        bg.className = 'card-bg';
+        bg.style.background = 'var(--grad-featured)';
+        card.appendChild(bg);
+      }
+
+      card.insertAdjacentHTML('beforeend', `
+        <div class="card-content">
+          <div class="card-header">
+            <img src="${s.logo}" alt="${s.name} logo">
+            <h3 class="site-name">${s.name}</h3>
+          </div>
+
+          <div class="badges-line">
+            ${feat ? '<span class="badge featured">★ Featured</span>' : ''}
+            <span class="badge ${s.free ? 'free' : 'paid'}">${s.free ? 'Free' : 'Paid'}</span>
+          </div>
+
+          <p class="description">${s.description || ''}</p>
+
+          <a class="visit-btn" href="${s.link}" target="_blank" rel="noopener">
+            Visit ${s.name}
+          </a>
+        </div>
+      `);
+
+      return card;
+    }
+
+    /* Render grid */
+    function render() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+
+      const list = sites.filter(s =>
+        activeFilter === 'free' ?  s.free :
+        activeFilter === 'paid' ? !s.free : true
+      );
+
+      if (!list.length) {
+        grid.innerHTML = '<p class="empty">No directories match this filter.</p>';
+        return;
+      }
+      list.forEach(s => grid.appendChild(buildCard(s)));
+    }
+
+    /* Filter buttons */
+    document.querySelectorAll('.filter-btn').forEach(btn =>
+      btn.addEventListener('click', () => {
+        document.querySelector('.filter-btn.active')?.classList.remove('active');
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        render();
+      })
+    );
+
+    /* ───── modal interaction (additions) ───── */
+    const vcModal = document.getElementById('vc-modal');
+    const vcForm  = document.getElementById('vc-form');
+
+    /* open from navbar & hero buttons */
+    document.querySelector('.navbar .submit-btn').addEventListener('click', e=>{
+      e.preventDefault();
+      vcModal.classList.remove('vc-hidden');
+    });
+    document.querySelector('.hero .cta').addEventListener('click', e=>{
+      e.preventDefault();
+      vcModal.classList.remove('vc-hidden');
+    });
+
+    /* click dimmed backdrop to close */
+    vcModal.addEventListener('click', e=>{
+      if(e.target===vcModal) vcModal.classList.add('vc-hidden');
+    });
+
+    /* submit → projects collection */
+    vcForm.addEventListener('submit', async e=>{
+      e.preventDefault();
+      try{
+        await addDoc(colProjects,{
+          name:        document.getElementById('vc-name').value.trim(),
+          link:        document.getElementById('vc-link').value.trim(),
+          description: document.getElementById('vc-desc').value.trim(),
+          createdAt:   serverTimestamp()
+        });
+        vcModal.classList.add('vc-hidden');
+        vcForm.reset();
+        alert('✔ Project submitted!');
+      }catch(err){
+        console.error(err);
+        alert('Error: '+err.message);
+      }
+    });
+    /* ───────────────────────────────────────── */
+
+    init().catch(err => {
+      document.getElementById('grid').innerHTML =
+        `<p class="empty">Error: ${err.message}</p>`;
+      console.error(err);
+    });
+  </script>
+</body>
+</html>
